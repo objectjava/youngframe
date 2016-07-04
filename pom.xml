@@ -15,10 +15,10 @@
 	<dependencies>
 		<!-- servlet api -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
-			<scope>provided</scope>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>servlet-api</artifactId>
+		    <version>2.5</version>
+		    <scope>provided</scope><!-- 参与编译无需打包 -->
 		</dependency>
 		<!-- jsp -->
 		<dependency>

@@ -31,7 +31,7 @@ public class ControllerHelper {
 							//从Action注解中获取URL映射规则
 							Action action=method.getAnnotation(Action.class);
 							String mapping=action.value();
-							//验证URL映射规则,
+							//验证URL映射规则,action注解规则
 							if(mapping.matches("\\w+:/\\w*")){
 								String[] array=mapping.split(":");
 								if(ArrayUtil.isNotEmpty(array)&&array.length==2){

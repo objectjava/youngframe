@@ -9,15 +9,15 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  */
 public class Request {
 	//请求方法
-	private String requestMehtod;
+	private String requestMethod;
 	//请求路径
 	private String requestPath;
 	public Request(String requestMethod, String requestPath) {
-		this.requestMehtod = requestMehtod;
+		this.requestMethod = requestMethod;
 		this.requestPath = requestPath;
 	}
-	public String getRequestMehtod() {
-		return requestMehtod;
+	public String getRequestMethod() {
+		return requestMethod;
 	}
 	public String getRequestPath() {
 		return requestPath;
