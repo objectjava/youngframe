@@ -39,7 +39,7 @@ public class ProxyChain {
 	public Object doProxyChain() throws Throwable {
 		Object methodResult;
 		if(proxyIndex<proxyList.size()){
-			methodResult=proxyList.get(proxyIndex++).doProxy(this);
+			methodResult=proxyList.get(proxyIndex++).doProxy(this); //调用拦截实例化对象的doProxy，也就是切面中的
 		}else{
 			methodResult=methodProxy.invokeSuper(targetObject, methodParams);
 		}

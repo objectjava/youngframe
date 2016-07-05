@@ -10,7 +10,7 @@ import net.sf.cglib.proxy.MethodProxy;
 /**
  * 3.代理管理器，创建所有代理对象
  * @author bj_yangsong
- *
+ * cglib 动态代理
  */
 public class ProxyManager {
 	@SuppressWarnings("unchecked")
@@ -19,7 +19,8 @@ public class ProxyManager {
 			@Override
 			public Object intercept(Object targetObject, Method targetMethod, Object[] methodParams,
 					MethodProxy methodProxy) throws Throwable {
-				return new ProxyChain(targetClass, targetObject, targetMethod, methodProxy, methodParams, proxyList);
+				return new ProxyChain(targetClass, targetObject, targetMethod, methodProxy, methodParams, proxyList)
+				.doProxyChain(); //调用invokeSuper
 			}
 		});
 	}

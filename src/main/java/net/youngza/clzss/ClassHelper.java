@@ -69,6 +69,7 @@ public final class ClassHelper {
 	public static Set<Class<?>> getClassSetBySuper(Class<?> superClass){
 		Set<Class<?>> classSet=new HashSet<Class<?>>();
 		for(Class<?> clzss:CLASS_SET){
+			//是用来判断一个类Class1和另一个类Class2是否相同或是另一个类的子类或接口
 			if(superClass.isAssignableFrom(clzss)&&!superClass.equals(clzss)){
 				classSet.add(clzss);
 			}

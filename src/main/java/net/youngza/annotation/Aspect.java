@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME) //保存在运行时
 public @interface Aspect {
 	/**
-	 * 注解
+	 * 注解，必须是有注解的类才能使用aop 比如值为Controller 那么这个切面就会拦截所有controller
 	 */
 	Class<? extends Annotation> value();
 }

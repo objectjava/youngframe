@@ -14,7 +14,11 @@ import net.youngza.clzss.ClassHelper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+/**
+ *1. 切面需要带上@Aspect注解且继承AspectProxy(模板作用)，覆盖其中的start after等方法
+ *2. 获取切面与被拦截类的列表
+ *3. 或得拦截类与切面对象的列表
+ */
 public class AOPHelper {
 	private static final Logger LOGGER=LoggerFactory.getLogger(AOPHelper.class);
 	static {
@@ -22,8 +26,8 @@ public class AOPHelper {
 			Map<Class<?>,Set<Class<?>>> proxyMap=createProxyMap();
 			Map<Class<?>,List<Proxy>> targetMap=createTargetMap(proxyMap);
 			for(Map.Entry<Class<?>, List<Proxy>> targetEntry:targetMap.entrySet()){
-				Class<?> targetClass=targetEntry.getKey();
-				List<Proxy> proxyList=targetEntry.getValue();
+				Class<?> targetClass=targetEntry.getKey();//需要被拦截的类
+				List<Proxy> proxyList=targetEntry.getValue();//切面实例
 				Object proxy=ProxyManager.createProxy(targetClass, proxyList);
 				BeanHelper.setBeanInstance(targetClass, proxy);
 			}
@@ -32,11 +36,12 @@ public class AOPHelper {
 		}
 	}
 	
+	//获取所有切面类，需要拦截的类列表：一个切面对应多个拦截列表
 	private static Map<Class<?>,Set<Class<?>>> createProxyMap() throws Exception{
 		Map<Class<?>,Set<Class<?>>> proxyMap=new HashMap<Class<?>, Set<Class<?>>>();
-		Set<Class<?>> proxyClassSet=ClassHelper.getClassSetBySuper(AspectProxy.class);
+		Set<Class<?>> proxyClassSet=ClassHelper.getClassSetBySuper(AspectProxy.class);//所有继承了AspectProxy的类（或实现类）
 		for(Class<?> proxyClass:proxyClassSet){
-			if(proxyClass.isAnnotationPresent(Aspect.class)){
+			if(proxyClass.isAnnotationPresent(Aspect.class)){//并且有@Aspect注解
 				Aspect aspect=proxyClass.getAnnotation(Aspect.class);
 				Set<Class<?>> targetClassSet=createTargetClassSet(aspect);
 				proxyMap.put(proxyClass, targetClassSet);
@@ -45,21 +50,22 @@ public class AOPHelper {
 		return proxyMap;
 	}
 	
-	
+	//获取除Aspect.value 注解上的Class列表，也就是获取所有需要拦截的列表
 	private static Set<Class<?>> createTargetClassSet(Aspect aspect) throws Exception{
 		Set<Class<?>> targetClassSet=new HashSet<Class<?>>();
 		Class<? extends Annotation> annotation=aspect.value();
-		if(annotation !=null && !annotation.equals(Aspect.class)){
+		if(annotation !=null && !annotation.equals(Aspect.class)){ //Ascpect注解的类不需要再加aop了
 			targetClassSet.addAll(ClassHelper.getClassSetByAnnotation(annotation));
 		}
 		return targetClassSet;
 	}
 	
+	//转换成一个拦截列表，对应多个实例化切面类
 	private static Map<Class<?>,List<Proxy>> createTargetMap(Map<Class<?>,Set<Class<?>>> proxyMap) throws Exception{
 		Map<Class<?>,List<Proxy>> targetMap=new HashMap<Class<?>, List<Proxy>>();
 		for(Map.Entry<Class<?>, Set<Class<?>>> proxyEntry:proxyMap.entrySet()){
-			Class<?> proxyClass=proxyEntry.getKey();
-			Set<Class<?>> targetClassSet=proxyEntry.getValue();
+			Class<?> proxyClass=proxyEntry.getKey();//切面，切面也实现了Proxy接口
+			Set<Class<?>> targetClassSet=proxyEntry.getValue();//需要拦截的列表
 			for(Class<?> targetClass:targetClassSet){
 				Proxy proxy=(Proxy) proxyClass.newInstance();
 				if(targetMap.containsKey(targetClass)){
