@@ -12,9 +12,10 @@ import net.sf.cglib.proxy.MethodProxy;
  * @author bj_yangsong
  * cglib 动态代理
  */
-public class ProxyManager {
+public class ProxyManager{
 	@SuppressWarnings("unchecked")
 	public static <T> T createProxy(final Class<?> targetClass,final List<Proxy> proxyList){
+		//获取代理
 		return (T) Enhancer.create(targetClass, new MethodInterceptor(){
 			@Override
 			public Object intercept(Object targetObject, Method targetMethod, Object[] methodParams,

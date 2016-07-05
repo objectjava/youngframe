@@ -12,7 +12,7 @@ public class ProxyChain {
 	private final Method targetMethod;//目标方法
 	private final MethodProxy methodProxy;//方法代理
 	private final Object[] methodParams;//方法参数
-	private List<Proxy> proxyList=new ArrayList<Proxy>();//代理列表
+	private List<Proxy> proxyList=new ArrayList<Proxy>();//切面列表
 	private int proxyIndex=0;//代理索引
 	
 	public ProxyChain(Class<?> targetClass, Object targetObject,
@@ -39,7 +39,7 @@ public class ProxyChain {
 	public Object doProxyChain() throws Throwable {
 		Object methodResult;
 		if(proxyIndex<proxyList.size()){
-			methodResult=proxyList.get(proxyIndex++).doProxy(this); //调用拦截实例化对象的doProxy，也就是切面中的
+			methodResult=proxyList.get(proxyIndex++).doProxy(this); //调用拦截实例化对象的doProxy，也就是切面中的,在第二次进来时index值已经变了
 		}else{
 			methodResult=methodProxy.invokeSuper(targetObject, methodParams);
 		}

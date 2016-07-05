@@ -29,7 +29,7 @@ public class AOPHelper {
 				Class<?> targetClass=targetEntry.getKey();//需要被拦截的类
 				List<Proxy> proxyList=targetEntry.getValue();//切面实例
 				Object proxy=ProxyManager.createProxy(targetClass, proxyList);
-				BeanHelper.setBeanInstance(targetClass, proxy);
+				BeanHelper.setBeanInstance(targetClass, proxy);//aop 切面中也需要注入值
 			}
 		}catch(Exception e){
 			LOGGER.error("aop failure",e);
@@ -39,10 +39,10 @@ public class AOPHelper {
 	//获取所有切面类，需要拦截的类列表：一个切面对应多个拦截列表
 	private static Map<Class<?>,Set<Class<?>>> createProxyMap() throws Exception{
 		Map<Class<?>,Set<Class<?>>> proxyMap=new HashMap<Class<?>, Set<Class<?>>>();
-		Set<Class<?>> proxyClassSet=ClassHelper.getClassSetBySuper(AspectProxy.class);//所有继承了AspectProxy的类（或实现类）
+		Set<Class<?>> proxyClassSet=ClassHelper.getClassSetBySuper(AspectProxy.class);//获取所有切面class
 		for(Class<?> proxyClass:proxyClassSet){
 			if(proxyClass.isAnnotationPresent(Aspect.class)){//并且有@Aspect注解
-				Aspect aspect=proxyClass.getAnnotation(Aspect.class);
+				Aspect aspect=proxyClass.getAnnotation(Aspect.class);//获取切面上的注解
 				Set<Class<?>> targetClassSet=createTargetClassSet(aspect);
 				proxyMap.put(proxyClass, targetClassSet);
 			}
@@ -50,7 +50,7 @@ public class AOPHelper {
 		return proxyMap;
 	}
 	
-	//获取除Aspect.value 注解上的Class列表，也就是获取所有需要拦截的列表
+	//获取除Aspect.value 注解上的Class列表，也就是获取所有需要拦截的列表，比如获取所有带controller类的注解类
 	private static Set<Class<?>> createTargetClassSet(Aspect aspect) throws Exception{
 		Set<Class<?>> targetClassSet=new HashSet<Class<?>>();
 		Class<? extends Annotation> annotation=aspect.value();
