@@ -33,4 +33,8 @@ public class BeanHelper {
 		}
 		return (T)BEAN_MAP.get(clzss);
 	}
+	//设置bean实例
+	public static void setBeanInstance(Class<?> clzss,Object obj){
+		BEAN_MAP.put(clzss, obj);
+	}
 }

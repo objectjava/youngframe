@@ -1,6 +1,7 @@
 package net.youngza;
 
 
+import net.youngza.aop.AOPHelper;
 import net.youngza.bean.BeanHelper;
 import net.youngza.clzss.ClassHelper;
 import net.youngza.clzss.ClassUtil;
@@ -14,8 +15,9 @@ import net.youngza.ioc.IOCHelper;
 public class InitLoader {
 	public static void init(){
 		Class<?> clzsses[]={
-				ClassHelper.class,//加在所有指定包目录下的class list
-				BeanHelper.class,//加在所有class与bean对象之间的映射
+				ClassHelper.class,//加载所有指定包目录下的class list
+				BeanHelper.class,//加载所有class与bean对象之间的映射
+				AOPHelper.class,//代理加载
 				IOCHelper.class,//将所有对象注入到Autowired注解Field上
 				ControllerHelper.class//加载所有controller类，并实现（requestMethod,requestPath）:(controllerClass,Method)的映射
 		};
