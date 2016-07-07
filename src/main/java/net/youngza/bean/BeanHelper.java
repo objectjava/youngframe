@@ -27,6 +27,7 @@ public class BeanHelper {
 	}
 
 	//获取bean实例,定义泛型，这样在调用时就不用强制类型转换了
+	@SuppressWarnings("unchecked")
 	public static <T> T getBeanInstance(Class<T> clzss){
 		if(!BEAN_MAP.containsKey(clzss)){
 			throw new RuntimeException("can not get bean class:"+clzss);

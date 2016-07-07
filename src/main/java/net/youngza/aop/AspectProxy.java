@@ -19,7 +19,7 @@ public abstract class AspectProxy implements Proxy{
 		Class<?> clzss=proxyChain.getTargetClass();
 		Method method=proxyChain.getTargetMethod();
 		Object[] params=proxyChain.getMethodParams();
-//		begin();
+		begin();
 		try{
 			if(intercept(clzss, method, params)){
 				beafore(clzss, method, params);
@@ -38,7 +38,7 @@ public abstract class AspectProxy implements Proxy{
 		return result;
 	}
 	//开始
-//	public void begin(){};
+	public void begin(){};
 	
 	/**
 	 * 过滤方法，符合条件的方法才被拦截

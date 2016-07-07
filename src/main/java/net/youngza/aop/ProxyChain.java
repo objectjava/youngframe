@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.cglib.proxy.MethodProxy;
-//2.代理执行
+//2.代理执行，cglib不允许嵌套增强，所以可以使用链式
 public class ProxyChain {
-	private final Class<?> targetClass; //目标类
-	private final Object targetObject; //目标对象
-	private final Method targetMethod;//目标方法
+	private final Class<?> targetClass; //需要拦截的类
+	private final Object targetObject; //需要拦截对象
+	private final Method targetMethod;//需要拦截方法
 	private final MethodProxy methodProxy;//方法代理
 	private final Object[] methodParams;//方法参数
 	private List<Proxy> proxyList=new ArrayList<Proxy>();//切面列表
@@ -36,6 +36,7 @@ public class ProxyChain {
 	public Object[] getMethodParams() {
 		return methodParams;
 	}
+	//这里使用了链式代理,顺序是0，1，2，3
 	public Object doProxyChain() throws Throwable {
 		Object methodResult;
 		if(proxyIndex<proxyList.size()){
