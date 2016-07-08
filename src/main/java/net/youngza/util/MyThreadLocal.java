@@ -33,7 +33,7 @@ public class MyThreadLocal<T> {
 		T value=container.get(thread);
 		if(value==null&& !container.containsKey(thread)){
 			value=initialValue();
-			container.put(thread, value);
+			set(value);
 		}
 		return value;
 	}

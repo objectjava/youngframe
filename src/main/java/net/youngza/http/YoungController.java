@@ -8,7 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,13 +42,13 @@ public class YoungController extends HttpServlet{
 		//初始化Helper类
 		InitLoader.init();
 		//获取ServletContext 用于注册servlet
-		//ServletContext servletContext=config.getServletContext();
+		ServletContext servletContext=config.getServletContext();
 		//注册jsp的servlet
-		//ServletRegistration jspServlet=servletContext.getServletRegistration("jsp");
-		//jspServlet.addMapping(ConfigUtil.getViewPath()+"*"); //注册目录下所有的jsp文件
+		ServletRegistration jspServlet=servletContext.getServletRegistration("jsp");
+		jspServlet.addMapping(ConfigUtil.getViewPath()+"*"); //注册目录下所有的jsp文件
 		//注册处理静态资源文件默认servlet
-		//ServletRegistration defaultServlet=servletContext.getServletRegistration("default");
-		//defaultServlet.addMapping(ConfigUtil.getAssetPath()+"*");
+		ServletRegistration defaultServlet=servletContext.getServletRegistration("default");
+		defaultServlet.addMapping(ConfigUtil.getAssetPath()+"*");
 	}
 
 	

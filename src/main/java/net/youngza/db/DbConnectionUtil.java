@@ -12,12 +12,12 @@ import org.slf4j.LoggerFactory;
 /*
  * 使用dbcp数据库连接池数据库连接工具
  */
-public class DbUtil {
+public class DbConnectionUtil {
 	private static final String DRIVER=ConfigUtil.getDriver();
 	private static final String URL=ConfigUtil.getURL();
 	private static final String USERNAME=ConfigUtil.getUserName();
 	private static final String PASSWORD=ConfigUtil.getPassWord();
-	private static final Logger LOGGER=LoggerFactory.getLogger(DbUtil.class);
+	private static final Logger LOGGER=LoggerFactory.getLogger(DbConnectionUtil.class);
 	//使用ThreadLoacl进行线程隔离，使connection在多线程情况下线程安全,还可以避免参数的传递（*后面是功能重点）
 	private static final ThreadLocal<Connection> CONNECTION_HOLDER=new ThreadLocal<Connection>();
 	//使用dbcp连接池对数据库连接做出优化
@@ -35,7 +35,7 @@ public class DbUtil {
 		DATASOURCE.setPassword(PASSWORD);
 	}
 	
-	//获取jdbc连接,不能用单例，只能用线程池
+	//获取jdbc连接,不能用单例，只能用线程池，这里必须加上ThreadLocal不然获取的可能为一个链接，或者加上同步
 	public static Connection getConnection(){
 		Connection conn=CONNECTION_HOLDER.get();
 		if(conn==null){

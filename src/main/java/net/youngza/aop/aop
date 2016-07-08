@@ -1,0 +1,31 @@
+切面：拦截的业务代码，比如日志，事物，安全
+切点：根据条件匹配想要拦截的类（锁定所有带@controller注解的类）
+代理模式：
+一、静态代理：每个要拦截的业务都要创建一个代理类
+二、java自己写动态代理
+class Proxy{
+	private static Object bean;
+	public Proxy(Object bean) {
+		this.bean=bean;
+	}
+	public static Object proxyRun(Method method,Object[] param) throws Exception{
+		System.out.println("start");
+		Object obj=method.invoke(bean, param);
+		System.out.println("end");
+		return obj;
+	}
+}
+三、jdk动态代理（面向接口编程，必须有接口）
+1.通过proxy.newInstance返回代理对象，参数有类加载器，实现接口，还有回调对象
+2.回调对象类需要实现InvocationHandler接口中invoke方法
+四、cglib动态代理（可以实现没有接口的类的方法代理）
+1.通过Enhancer.create 返回代理对象参数为切点类和回调类
+2.回调类要实现intercept方法proxy.invokeSuper(obj, args);
+五、Spring动态代理（编程式）
+1.各种增强实现MethodBeaforAdvice..
+2.获得代理工场
+3.为代理工场settarget
+4.addAdvice
+六、Spring代理（声名式）
+
+7.对方法的增强是织入，对类的增强是引入(如果这个类没有这个方法，那么将有增强类来实现这个方法)

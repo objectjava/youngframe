@@ -25,13 +25,17 @@ public class AOPHelper {
 	private static final Logger LOGGER=LoggerFactory.getLogger(AOPHelper.class);
 	static {
 		try{
-			Map<Class<?>,Set<Class<?>>> proxyMap=createProxyMap(); //切面类：拦截类
-			Map<Class<?>,List<Proxy>> targetMap=createTargetMap(proxyMap);
+			Map<Class<?>,Set<Class<?>>> proxyMap=createProxyMap(); //切面类：切点类集合
+			Map<Class<?>,List<Proxy>> targetMap=createTargetMap(proxyMap);//切点类：切面实例
 			for(Map.Entry<Class<?>, List<Proxy>> targetEntry:targetMap.entrySet()){
-				Class<?> targetClass=targetEntry.getKey();//需要被拦截的类
+				Class<?> targetClass=targetEntry.getKey();//切点类
 				List<Proxy> proxyList=targetEntry.getValue();//切面实例
-				Object proxy=ProxyManager.createProxy(targetClass, proxyList); //返回代理对象
-				BeanHelper.setBeanInstance(targetClass, proxy);//aop 切面中也需要注入值,估计这里有错误
+				Object proxy=ProxyManager.createProxy(targetClass, proxyList); //链式代理,返回代理对象
+				/*
+				 * 参数为切点类和代理对象，这里ioc能注入吗？这里注入的不是一个对象和他的父类吗？
+				 * 而ioc是通过targetClass.getDeclaredFields 获得的Field，proxy中的Field并没有获取到啊？
+				 */
+				BeanHelper.setBeanInstance(targetClass, proxy);
 			}
 		}catch(Exception e){
 			LOGGER.error("aop failure",e);
@@ -71,13 +75,13 @@ public class AOPHelper {
 			Class<?> proxyClass=proxyEntry.getKey();//切面，切面也实现了Proxy接口
 			Set<Class<?>> targetClassSet=proxyEntry.getValue();//需要拦截的列表
 			for(Class<?> targetClass:targetClassSet){
-				Proxy proxy=(Proxy) proxyClass.newInstance();
+				Proxy proxy=(Proxy) proxyClass.newInstance();//切面实例
 				if(targetMap.containsKey(targetClass)){
 					targetMap.get(targetClass).add(proxy);
 				}else{
 					List<Proxy> proxyList=new ArrayList<Proxy>();
 					proxyList.add(proxy);
-					targetMap.put(targetClass, proxyList);
+					targetMap.put(targetClass, proxyList);//切点类：代理实例
 				}
 			}
 		}

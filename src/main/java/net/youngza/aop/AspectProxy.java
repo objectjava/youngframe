@@ -23,7 +23,7 @@ public abstract class AspectProxy implements Proxy{
 		try{
 			if(intercept(clzss, method, params)){
 				beafore(clzss, method, params);
-				result=proxyChain.doProxyChain();
+				result=proxyChain.doProxyChain();//加多少个拦截那肯定就执行多少次方法
 				after(clzss, method, params);
 			}else{
 				result=proxyChain.doProxyChain();
