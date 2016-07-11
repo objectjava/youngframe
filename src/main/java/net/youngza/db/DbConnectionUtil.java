@@ -62,4 +62,48 @@ public class DbConnectionUtil {
 			}
 		}
 	}
+	/**
+	 * 开启事物
+	 */
+	public static void beginTransaction(){
+		Connection conn=getConnection();
+		try {
+			conn.setAutoCommit(false);
+		} catch (SQLException e) {
+			LOGGER.error("open Transaction failure.",e);
+			throw new RuntimeException(e);
+		}finally{
+			CONNECTION_HOLDER.set(conn);
+		}
+	}
+	/**
+	 * 提交事务
+	 */
+	public static void CommitTransaction(){
+		Connection conn=getConnection();
+		try {
+			conn.commit();
+			conn.close();
+		} catch (SQLException e) {
+			LOGGER.error("submit Transaction failure.",e);
+			throw new RuntimeException(e);
+		}finally{
+			CONNECTION_HOLDER.remove();//删除
+		}
+	}
+	/**
+	 * 回滚事务
+	 */
+	public static void rollBackTransaction(){
+		Connection conn=getConnection();
+		try {
+			conn.rollback();
+			conn.close();
+		} catch (SQLException e) {
+			LOGGER.error("rollback Transaction failure.",e);
+			throw new RuntimeException(e);
+		}finally{
+			CONNECTION_HOLDER.remove();
+		}
+	}
 }

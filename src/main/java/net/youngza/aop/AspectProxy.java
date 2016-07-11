@@ -37,8 +37,10 @@ public abstract class AspectProxy implements Proxy{
 		}
 		return result;
 	}
-	//开始
-	public void begin(){};
+	/**
+	 * 引入，类增强
+	 */
+	public abstract void begin();
 	
 	/**
 	 * 过滤方法，符合条件的方法才被拦截
